@@ -274,14 +274,22 @@ F0 = s14;
 /****************************************************************
 *FUNCTION NAME:ESP 8266 pin settings
 *FUNCTION     :set esp or arduino
-*INPUT        :none
+*INPUT        :0=Arduino, 1=ESP8266, 2=ESP32.
 *OUTPUT       :none
 ****************************************************************/
 void ELECHOUSE_CC1101::setESP8266(byte esp){
 
 switch (esp)
 {
-case 0: SCK_PIN = 13; MISO_PIN = 12; MOSI_PIN = 11; SS_PIN = 10; break; 
+case 0: 
+	#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)  
+		//this will compile for Arduino UNO, Pro and older boards
+		SCK_PIN = 13; MISO_PIN = 12; MOSI_PIN = 11; SS_PIN = 10;  
+	#elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)  
+		//this will compile for Arduino Mega
+		SCK_PIN = 52; MISO_PIN = 50; MOSI_PIN = 51; SS_PIN = 53; 
+	#endif
+	break; 
 case 1: SCK_PIN = 14; MISO_PIN = 12; MOSI_PIN = 13; SS_PIN = 15; break;
 case 2: SCK_PIN = 18; MISO_PIN = 19; MOSI_PIN = 23; SS_PIN = 5; break;
 }
@@ -377,6 +385,7 @@ void ELECHOUSE_CC1101::RegConfigSettings(byte f)
     SpiWriteReg(CC1101_DEVIATN,  0x15);
     SpiWriteReg(CC1101_FREND1,   0x56);
     SpiWriteReg(CC1101_FREND0,   0x11);
+    SpiWriteReg(CC1101_MCSM1 ,   0x00); // Set always clear channel indication, so TX mode can be set immideatly. default: 0x30, Main Radio Control State Machine Configuration. 5:4 CCA_MODE[1:0] 3 (11) R/W Selects CCA_MODE; Reflected in CCA signal. 3 (11) If RSSI below threshold unless currently receiving a packet
     SpiWriteReg(CC1101_MCSM0 ,   0x18);
     SpiWriteReg(CC1101_FOCCFG,   0x16);
     SpiWriteReg(CC1101_BSCFG,    0x1C);

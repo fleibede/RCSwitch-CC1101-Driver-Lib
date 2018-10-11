@@ -136,8 +136,7 @@ class ELECHOUSE_CC1101
 		void SpiWriteBurstReg(byte addr, byte *buffer, byte num);
 		void SpiStrobe(byte strobe);
 		byte SpiReadReg(byte addr);
-		void SpiReadBurstReg(byte addr, byte *buffer, byte num);
-		byte SpiReadStatus(byte addr);
+		void SpiReadBurstReg(byte addr, byte *buffer, byte num);		
 		void RegConfigSettings(byte f);
 	public:
 		void Init(void);
@@ -156,6 +155,7 @@ class ELECHOUSE_CC1101
     void setChannel(byte chnl);
     byte CheckReceiveFlag(void);
     byte ReceiveData(byte *rxBuffer);
+	byte SpiReadStatus(byte addr);
 };
 
 extern ELECHOUSE_CC1101 ELECHOUSE_cc1101;
