@@ -277,7 +277,7 @@ F0 = s14;
 *INPUT        :0=Arduino, 1=ESP8266, 2=ESP32.
 *OUTPUT       :none
 ****************************************************************/
-void ELECHOUSE_CC1101::setESP8266(byte esp){
+void ELECHOUSE_CC1101::setDeviceType(byte esp){
 
 switch (esp)
 {

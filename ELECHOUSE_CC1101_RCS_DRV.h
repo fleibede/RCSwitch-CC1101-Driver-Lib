@@ -147,7 +147,7 @@ class ELECHOUSE_CC1101
     void SetTx(float mhz);
     void setMHZ(float mhz);
     void SendData(byte *txBuffer, byte size);
-    void setESP8266(byte esp);
+    void setDeviceType(byte esp);
     void SetSres(void);
     void setdbm(byte dbm);
     void setChsp(byte Chsp);
