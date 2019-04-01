@@ -385,8 +385,10 @@ void ELECHOUSE_CC1101::RegConfigSettings(byte f)
     SpiWriteReg(CC1101_DEVIATN,  0x15);
     SpiWriteReg(CC1101_FREND1,   0x56);
     SpiWriteReg(CC1101_FREND0,   0x11);
-    SpiWriteReg(CC1101_MCSM1 ,   0x00); // Set always clear channel indication, so TX mode can be set immideatly. default: 0x30, Main Radio Control State Machine Configuration. 5:4 CCA_MODE[1:0] 3 (11) R/W Selects CCA_MODE; Reflected in CCA signal. 3 (11) If RSSI below threshold unless currently receiving a packet
-    SpiWriteReg(CC1101_MCSM0 ,   0x18);
+    //SpiWriteReg(CC1101_MCSM1 ,   0x00); // Set always clear channel indication, so TX mode can be set immideatly. default: 0x30, Main Radio Control State Machine Configuration. 5:4 CCA_MODE[1:0] 3 (11) R/W Selects CCA_MODE; Reflected in CCA signal. 3 (11) If RSSI below threshold unless currently receiving a packet
+    SpiWriteReg(CC1101_MCSM1 ,   0x0E); // Set always clear channel indication, so TX mode can be set immideatly. Keep Tx and Rx after finishing packets. default: 0x30, Main Radio Control State Machine Configuration. 5:4 CCA_MODE[1:0] 3 (11) R/W Selects CCA_MODE; Reflected in CCA signal. 3 (11) If RSSI below threshold unless currently receiving a packet
+//	SpiWriteReg(CC1101_MCSM0 ,   0x18); // 0x18 = PO_timeout = 2 (10)-expirecount=64, FS_Autocal=1 (01)
+	SpiWriteReg(CC1101_MCSM0 ,   0x08); // 0x18 = PO_timeout = 2 (10)-expirecount=64, FS_Autocal=0 (00) (only manual calib)
     SpiWriteReg(CC1101_FOCCFG,   0x16);
     SpiWriteReg(CC1101_BSCFG,    0x1C);
     SpiWriteReg(CC1101_AGCCTRL2, 0xC7);
@@ -417,14 +419,16 @@ void ELECHOUSE_CC1101::RegConfigSettings(byte f)
 ****************************************************************/
 void ELECHOUSE_CC1101::SetTx(void)
 {
-  SpiStrobe(CC1101_SRES);
-  SpiInit();                    //spi initialization
-  GDO_Set();                    //GDO set
-  digitalWrite(SS_PIN, HIGH);
-  digitalWrite(SCK_PIN, HIGH);
-  digitalWrite(MOSI_PIN, LOW);
-  Reset();                      //CC1101 reset
-  RegConfigSettings(conf);      //CC1101 register config
+	///*
+  //SpiStrobe(CC1101_SRES);
+  //SpiInit();                    //spi initialization
+  //GDO_Set();                    //GDO set
+  //digitalWrite(SS_PIN, HIGH);
+  //digitalWrite(SCK_PIN, HIGH);
+  //digitalWrite(MOSI_PIN, LOW);
+  //Reset();                      //CC1101 reset
+  //RegConfigSettings(conf);      //CC1101 register config */
+  SpiStrobe(CC1101_SCAL);        //Calibrate
   SpiStrobe(CC1101_STX);        //start send
 }
 /****************************************************************
@@ -435,14 +439,15 @@ void ELECHOUSE_CC1101::SetTx(void)
 ****************************************************************/
 void ELECHOUSE_CC1101::SetRx(void)
 {
-  SpiStrobe(CC1101_SRES);
-  SpiInit();                    //spi initialization
-  GDO_Set();                    //GDO set
-  digitalWrite(SS_PIN, HIGH);
-  digitalWrite(SCK_PIN, HIGH);
-  digitalWrite(MOSI_PIN, LOW);
-  Reset();                      //CC1101 reset
-  RegConfigSettings(conf);      //CC1101 register config
+  //SpiStrobe(CC1101_SRES);
+  //SpiInit();                    //spi initialization
+  //GDO_Set();                    //GDO set
+  //digitalWrite(SS_PIN, HIGH);
+  //digitalWrite(SCK_PIN, HIGH);
+  //digitalWrite(MOSI_PIN, LOW);
+  //Reset();                      //CC1101 reset
+  //RegConfigSettings(conf);      //CC1101 register config
+  SpiStrobe(CC1101_SCAL);        //Calibrate
   SpiStrobe(CC1101_SRX);        //start receive
 }
 /****************************************************************
