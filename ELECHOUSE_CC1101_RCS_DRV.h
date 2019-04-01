@@ -3,7 +3,7 @@
   Copyright (c) 2010 Michael.
     Author: Michael, <www.elechouse.com>
     Version: November 12, 2010
- 
+
   This library is designed to use CC1101/CC1100 module on Arduino platform.
   CC1101/CC1100 module is an useful wireless module.Using the functions of the 
   library, you can easily send and receive data by the CC1101/CC1100 module. 
@@ -16,7 +16,7 @@ cc1101 Driver for RC Switch. Mod by Little Satan. With permission to modify and 
 #ifndef ELECHOUSE_CC1101_RCS_DRV_h
 #define ELECHOUSE_CC1101_RCS_DRV_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 // Init constants
 #define PA10  0x00
@@ -120,24 +120,21 @@ cc1101 Driver for RC Switch. Mod by Little Satan. With permission to modify and 
 #define CC1101_TXFIFO       0x3F
 #define CC1101_RXFIFO       0x3F
 
-//*************************************** pins **************************************************//
-#define GDO0 2
-#define GDO2 4
 //************************************* class **************************************************//
 class ELECHOUSE_CC1101
 {
 	private:
-		void SpiInit(void);
-		void SpiMode(byte config);
-		byte SpiTransfer(byte value);
+		void SpiStart(void);
+    void SpiEnd(void);
 		void GDO_Set (void);
 		void Reset (void);
 		void SpiWriteReg(byte addr, byte value);
 		void SpiWriteBurstReg(byte addr, byte *buffer, byte num);
 		void SpiStrobe(byte strobe);
-		byte SpiReadReg(byte addr);
-		void SpiReadBurstReg(byte addr, byte *buffer, byte num);		
+		void SpiReadBurstReg(byte addr, byte *buffer, byte num);
+    byte SpiReadReg(byte addr);
 		void RegConfigSettings(byte f);
+    void setSpi(void);
 	public:
 		void Init(void);
 		void Init(byte f);
@@ -147,15 +144,16 @@ class ELECHOUSE_CC1101
     void SetTx(float mhz);
     void setMHZ(float mhz);
     void SendData(byte *txBuffer, byte size);
-    void setDeviceType(byte esp);
-    void SetSres(void);
-    void setdbm(byte dbm);
+    void setSpiPin(byte sck, byte miso, byte mosi, byte ss);
+    void setSres(void);
+    void setGDO(byte gdo0, byte gdo2);
     void setChsp(byte Chsp);
     void setRxBW(byte RxBW);
     void setChannel(byte chnl);
     byte CheckReceiveFlag(void);
     byte ReceiveData(byte *rxBuffer);
-	byte SpiReadStatus(byte addr);
+    byte SpiReadStatus(byte addr);
+
 };
 
 extern ELECHOUSE_CC1101 ELECHOUSE_cc1101;
