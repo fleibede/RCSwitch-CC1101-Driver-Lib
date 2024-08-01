@@ -85,12 +85,6 @@ uint8_t PA_TABLE_915[10] {0x03,0x0E,0x1E,0x27,0x38,0x8E,0x84,0xCC,0xC3,0xC0,};  
 ****************************************************************/
 void ELECHOUSE_CC1101::SpiStart(void)
 {
-  // initialize the SPI pins
-  pinMode(SCK_PIN, OUTPUT);
-  pinMode(MOSI_PIN, OUTPUT);
-  pinMode(MISO_PIN, INPUT);
-  pinMode(SS_PIN, OUTPUT);
-
   // enable SPI
   #ifdef ESP32
   SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN, SS_PIN);
@@ -158,6 +152,11 @@ void ELECHOUSE_CC1101::Reset (void)
 void ELECHOUSE_CC1101::Init(void)
 {
   setSpi();
+  // initialize the SPI pins
+  pinMode(SCK_PIN, OUTPUT);
+  pinMode(MOSI_PIN, OUTPUT);
+  pinMode(MISO_PIN, INPUT);
+  pinMode(SS_PIN, OUTPUT);
   SpiStart();                   //spi initialization
   digitalWrite(SS_PIN, HIGH);
   digitalWrite(SCK_PIN, HIGH);
